@@ -39,7 +39,7 @@
       "Comme tu le sais, ce jour sera notre anniversaire de rencontre. Trois ans après t'avoir rencontré, je suis toujours aussi attendri en te regardant, comme le premier jour. J'espère que le restaurant sera ouvert si c'est ton seul jour de disponibilité, sinon, je m'arrangerai :)",
 
     // Messages affichés à chaque esquive du bouton "Non" (dans l'ordre)
-    DODGE_MESSAGES: ["T'es sûre ? 👀", "Arrête !! 😂", "Nonnnn 🙅‍♀️"],
+    DODGE_MESSAGES: ["T'es sûre ? 👀", "Arrête !! 😰😰", "Nonnnn "],
   };
 
   /* ===================================================================
