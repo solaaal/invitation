@@ -13,7 +13,7 @@
   const CONFIG = {
     // Option A — Formspree : remplacez par l'URL de votre formulaire Formspree
     // (créez un formulaire sur https://formspree.io puis collez son endpoint ici)
-    FORMSPREE_ENDPOINT: "", // ex: "https://formspree.io/f/xxxxxxxx"
+    FORMSPREE_ENDPOINT: "https://formspree.io/f/xojobkvn", // ex: "https://formspree.io/f/xxxxxxxx"
 
     // Option B — Google Sheet via Google Apps Script Web App
     // (déployez un script Apps Script en tant que "Web App" et collez l'URL ici)
