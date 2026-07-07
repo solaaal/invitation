@@ -1,0 +1,548 @@
+/* =====================================================================
+   GRUPPOMIMO — INVITATION
+   Style mobile-first. Inspirations : Apple / Linear / Framer / Stripe.
+   ===================================================================== */
+
+/* -------------------- 1. TOKENS -------------------- */
+:root{
+  /* Palette */
+  --off-white:   #FFFDFB;
+  --cream:       #FBF6EF;
+  --blush:       #FBE2E2;
+  --blush-soft:  #FDEDEC;
+  --red:         #C23B3B;   /* rouge GruppoMimo */
+  --red-dark:    #A32E2E;
+  --near-black:  #201C1B;
+  --ink-soft:    #4A4340;
+
+  /* Typo */
+  --font-main: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+
+  /* Rythme / effets */
+  --ease: cubic-bezier(.22,1,.36,1);
+  --shadow-soft: 0 10px 30px -10px rgba(32,28,27,.15);
+  --shadow-card: 0 4px 20px rgba(32,28,27,.06);
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+}
+
+/* -------------------- 2. RESET -------------------- */
+*, *::before, *::after{ box-sizing: border-box; }
+html{
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+body{
+  margin:0;
+  font-family: var(--font-main);
+  background: var(--off-white);
+  color: var(--near-black);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+h1,h2,h3,p,ul{ margin:0; }
+ul{ list-style:none; padding:0; }
+button{ font-family: inherit; }
+img{ display:block; max-width:100%; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* Focus visible, accessible */
+a:focus-visible, button:focus-visible{
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* -------------------- 3. BARRE DE PROGRESSION -------------------- */
+.progress-bar{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 14px 20px 10px;
+  background: linear-gradient(to bottom, rgba(255,253,251,.92), rgba(255,253,251,.55));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  gap: 6px;
+}
+.progress-track{
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  height: 4px;
+  background: rgba(32,28,27,.08);
+  border-radius: 4px;
+}
+.progress-fill{
+  position:absolute;
+  top:0; left:0;
+  height:100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--red), var(--red-dark));
+  border-radius: 4px;
+  transition: width .6s var(--ease);
+}
+.progress-steps{
+  position:absolute;
+  top: 50%;
+  left: 0; right: 0;
+  transform: translateY(-50%);
+  display:flex;
+  justify-content: space-between;
+}
+.step{
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--off-white);
+  border: 2px solid rgba(32,28,27,.12);
+  display:flex; align-items:center; justify-content:center;
+  font-size: 11px;
+  transition: all .4s var(--ease);
+  transform: scale(.9);
+  opacity: .55;
+}
+.step.is-active, .step.is-done{
+  border-color: var(--red);
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 2px 10px rgba(194,59,59,.25);
+}
+.progress-label{
+  font-size: 11px;
+  letter-spacing: .04em;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+/* -------------------- 4. CANVAS CONFETTIS -------------------- */
+#confettiCanvas{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* -------------------- 5. GESTION DES ÉCRANS -------------------- */
+#app{
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+.screen{
+  display:none;
+  min-height: 100vh;
+  width: 100%;
+}
+.screen.is-active{
+  display:block;
+}
+.screen.is-entering{
+  animation: screenFadeIn .7s var(--ease) forwards;
+}
+.screen.is-leaving{
+  animation: screenFadeOut .35s var(--ease) forwards;
+}
+@keyframes screenFadeIn{
+  from{ opacity: 0; transform: translateY(18px) scale(.99); }
+  to{ opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes screenFadeOut{
+  from{ opacity: 1; transform: translateY(0) scale(1); }
+  to{ opacity: 0; transform: translateY(-14px) scale(.99); }
+}
+
+/* -------------------- 6. PAGE 1 — HERO -------------------- */
+.hero{
+  position: relative;
+  min-height: 100svh;
+  background-size: cover;
+  background-position: center;
+  display:flex;
+  align-items:flex-end;
+  padding: 100px 20px 56px;
+}
+.hero-overlay{
+  position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(32,20,18,.35) 0%, rgba(32,20,18,.25) 40%, rgba(20,14,13,.88) 100%);
+}
+.hero-content{
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  margin: 0 auto;
+  color: var(--off-white);
+  text-align: left;
+}
+.eyebrow{
+  font-size: 12px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--blush);
+  margin-bottom: 14px;
+}
+.eyebrow.center{ text-align:center; color: var(--red); }
+.hero-title{
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  margin-bottom: 18px;
+}
+.hero-text{
+  font-size: clamp(1rem, 3.6vw, 1.15rem);
+  line-height: 1.55;
+  color: rgba(255,253,251,.88);
+  max-width: 46ch;
+}
+.hero-text strong{ color: var(--off-white); }
+
+.scroll-cue{
+  margin-top: 46px;
+  width: 26px; height: 42px;
+  border: 2px solid rgba(255,253,251,.5);
+  border-radius: 20px;
+  position: relative;
+}
+.scroll-cue span{
+  position:absolute;
+  top: 6px; left: 50%;
+  width: 4px; height: 8px;
+  margin-left: -2px;
+  background: var(--off-white);
+  border-radius: 4px;
+  animation: scrollCue 1.8s ease-in-out infinite;
+}
+@keyframes scrollCue{
+  0%{ transform: translateY(0); opacity: 1; }
+  70%{ transform: translateY(14px); opacity: 0; }
+  100%{ transform: translateY(0); opacity: 0; }
+}
+
+/* Fade-in au chargement */
+.reveal{
+  animation: fadeInUp 1s var(--ease) both;
+}
+@keyframes fadeInUp{
+  from{ opacity: 0; transform: translateY(24px); }
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+/* Section deux colonnes */
+.split-section{
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 64px 20px 90px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  background: var(--cream);
+}
+.split-media{
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  aspect-ratio: 1 / 1;
+}
+.zoom-img{
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: scale(1.01);
+  transition: transform 1.2s var(--ease);
+}
+.split-media:hover .zoom-img,
+.split-media:focus-within .zoom-img{
+  transform: scale(1.08);
+}
+.split-copy{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+}
+.split-copy h2{
+  font-size: clamp(1.3rem, 4.6vw, 1.7rem);
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+.split-copy p{
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+
+/* Reveal on scroll (déclenché en JS via IntersectionObserver) */
+.reveal-on-scroll{
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .9s var(--ease), transform .9s var(--ease);
+}
+.reveal-on-scroll.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* -------------------- 7. BOUTONS -------------------- */
+.btn{
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 15px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -.005em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform .28s var(--ease), box-shadow .28s var(--ease), background .28s var(--ease);
+  will-change: transform;
+}
+.btn:active{ transform: translateY(1px) scale(.98); }
+
+.btn-primary{
+  background: linear-gradient(180deg, var(--red), var(--red-dark));
+  color: var(--off-white);
+  box-shadow: 0 8px 20px -6px rgba(194,59,59,.55), inset 0 1px 0 rgba(255,255,255,.15);
+}
+.btn-primary:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px -8px rgba(194,59,59,.6), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.btn-secondary{
+  background: var(--off-white);
+  color: var(--ink-soft);
+  border: 1.5px solid rgba(32,28,27,.14);
+}
+.btn-secondary:hover{
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+  border-color: rgba(32,28,27,.22);
+}
+.btn-ghost{
+  background: transparent;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.btn-ghost:hover{ color: var(--near-black); }
+
+.btn-large{ padding: 17px 34px; font-size: 1.05rem; width: 100%; max-width: 320px; }
+.btn-block{ width: 100%; max-width: none; }
+.btn:disabled{ opacity: .45; cursor: not-allowed; transform:none !important; box-shadow:none !important; }
+
+.arrow{ transition: transform .3s var(--ease); }
+.btn:hover .arrow{ transform: translateX(4px); }
+
+/* -------------------- 8. ÉCRANS CENTRÉS (question / non / final) -------------------- */
+.centered-screen{
+  min-height: 100svh;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding: 120px 24px 60px;
+  gap: 28px;
+  background: linear-gradient(180deg, var(--off-white), var(--blush-soft));
+}
+
+.floating-heart, .big-emoji, .final-heart{
+  font-size: 3.4rem;
+  animation: floatHeart 3.2s ease-in-out infinite;
+}
+@keyframes floatHeart{
+  0%, 100%{ transform: translateY(0) scale(1); }
+  50%{ transform: translateY(-10px) scale(1.06); }
+}
+
+.question-title{
+  font-size: clamp(1.6rem, 6vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.25;
+  max-width: 20ch;
+}
+.subtle-text{
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 34ch;
+}
+
+.choice-buttons{
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  gap: 16px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* -------------------- 9. PAGE 2B — NON -------------------- */
+.big-emoji{ filter: grayscale(.15); }
+
+/* -------------------- 10. PAGE 3 — CALENDRIER -------------------- */
+.calendar-screen{
+  min-height: 100svh;
+  padding: 120px 20px 80px;
+  max-width: 640px;
+  margin: 0 auto;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap: 14px;
+}
+.calendar-title{
+  font-size: clamp(1.4rem, 5.2vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  line-height: 1.3;
+}
+.calendar-text{
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 42ch;
+  margin-bottom: 8px;
+}
+
+.calendar-card{
+  width: 100%;
+  background: var(--off-white);
+  border-radius: var(--radius-lg);
+  padding: 28px 20px 32px;
+  box-shadow: var(--shadow-soft);
+  display:flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.calendar-month{
+  font-size: .8rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--red);
+}
+
+.calendar-grid{
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.day-cell{
+  aspect-ratio: 1;
+  display:flex; align-items:center; justify-content:center;
+  border-radius: 12px;
+  background: var(--cream);
+  border: 1.5px solid transparent;
+  font-size: .92rem;
+  font-weight: 500;
+  color: var(--near-black);
+  cursor: pointer;
+  transition: all .25s var(--ease);
+}
+.day-cell:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+.day-cell.is-selected{
+  background: var(--red);
+  color: var(--off-white);
+  border-color: var(--red-dark);
+  box-shadow: 0 6px 16px -6px rgba(194,59,59,.5);
+}
+.day-cell.is-empty{
+  visibility: hidden;
+}
+.day-label{
+  font-size: .65rem;
+  color: var(--ink-soft);
+  opacity: .6;
+  font-weight: 600;
+}
+
+.time-slots{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.time-chip{
+  border: 1.5px solid rgba(32,28,27,.14);
+  background: var(--off-white);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: .92rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: all .25s var(--ease);
+}
+.time-chip:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+.time-chip.is-selected{
+  background: var(--near-black);
+  color: var(--off-white);
+  border-color: var(--near-black);
+}
+
+.calendar-hint{
+  font-size: .85rem;
+  color: var(--ink-soft);
+  opacity: .8;
+}
+
+/* -------------------- 11. PAGE 4 — FINAL -------------------- */
+.final-title{
+  font-size: clamp(2.2rem, 9vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+.final-sub{
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+}
+.final-recap{
+  margin-top: 10px;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--red-dark);
+  background: var(--blush);
+  padding: 10px 18px;
+  border-radius: 999px;
+}
+
+/* -------------------- 12. RESPONSIVE : TABLETTE -------------------- */
+@media (min-width: 700px){
+  .split-section{
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 90px 40px;
+  }
+  .split-copy{ text-align:left; align-items:flex-start; }
+  .choice-buttons{ flex-direction: row; }
+  .btn-large{ width: auto; }
+  .calendar-card{ padding: 36px 40px 40px; }
+}
+
+/* -------------------- 13. RESPONSIVE : DESKTOP -------------------- */
+@media (min-width: 1080px){
+  .hero{ padding: 140px 80px 80px; align-items: center; }
+  .hero-content{ max-width: 720px; }
+  .split-section{ max-width: 1160px; gap: 64px; }
+  .calendar-card{ padding: 44px 56px 48px; }
+  .day-cell{ font-size: 1rem; }
+}
